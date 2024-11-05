@@ -13,7 +13,6 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 
-
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -27,42 +26,38 @@ function Copyright(props) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
 const defaultTheme = createTheme();
 
 export default function Signup() {
-  const [serverStatus,setserverStatus]=useState(null);
-  const [data,setData] = useState({name:'',email:'',password:''});
-  const handleChange = (event) =>{
+  const [serverStatus, setServerStatus] = useState(null);
+  const [data, setData] = useState({ name: '', email: '', password: '' });
+
+  const handleChange = (event) => {
     const { name, value } = event.target;
-    setData({ ...data, [name]: value });
-  }
-  
+    setData({ ...data, [name]: value }); 
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(data.data);
-    console.log({
+
+    axios.post("https://saisankar.up.railway.app/signup", {
       name: data.name,
       email: data.email,
       password: data.password,
-    });
-    axios.post("https://saisankar.up.railway.app/signup",{
-      name: data.name,
-      email: data.email,
-      password: data.password,
-    }).then((res)=>{
-      if(res.status === '201'){
-        setserverStatus(true);
-      }else{
-        setserverStatus(false);
+    })
+    .then((res) => {
+      if (res.status === 201) { 
+        setServerStatus(true);
+        setData({ name: '', email: '', password: '' }); 
+        console.log(data.data);
+      } else if(res.status === 401){
+        setServerStatus(false);
       }
-      console.log(res.data)
-      setData({name:'',email:'',password:''});
+      console.log(res.data);
     })
     .catch((error) => {
       console.error("There was an error!", error.response || error.message);
-      setserverStatus(false); 
+      setServerStatus(false);
     });
   };
 
@@ -86,7 +81,7 @@ export default function Signup() {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
                   autoComplete="given-name"
                   name="name"
@@ -94,11 +89,11 @@ export default function Signup() {
                   fullWidth
                   id="name"
                   label="Name"
+                  value={data.name} 
                   onChange={handleChange}
                   autoFocus
                 />
               </Grid>
-              
               <Grid item xs={12}>
                 <TextField
                   required
@@ -107,6 +102,7 @@ export default function Signup() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  value={data.email} 
                   onChange={handleChange}
                 />
               </Grid>
@@ -119,10 +115,10 @@ export default function Signup() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  value={data.password} 
                   onChange={handleChange}
                 />
               </Grid>
-
             </Grid>
             <Button
               type="submit"
@@ -133,10 +129,10 @@ export default function Signup() {
               Sign Up
             </Button>
             {serverStatus === true && <div>Submit successfully</div>}
-            {serverStatus === false && <div><h2 style={{color:'red'}}>Backend Server Down</h2></div>}
+            {serverStatus === false && <div><h2 style={{ color: 'red' }}>Backend Server Down</h2></div>}
             <Grid container justifyContent="flex-end">
               <Grid item>
-               
+                {/* Optional: Add a link for users to sign in if needed */}
               </Grid>
             </Grid>
           </Box>
