@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -31,21 +32,38 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function Signup() {
+  const [serverStatus,setserverStatus]=useState(null);
+  const [data,setData] = useState({name:'',email:'',password:''});
+  const handleChange = (event) =>{
+    const { name, value } = event.target;
+    setData({ ...data, [name]: value });
+  }
+  
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    console.log(data.data);
     console.log({
-      name: data.get('name'),
-      email: data.get('email'),
-      password: data.get('password'),
+      name: data.name,
+      email: data.email,
+      password: data.password,
     });
     axios.post("https://saisankar.up.railway.app/signup",{
-      name: data.get('name'),
-      email: data.get('email'),
-      password: data.get('password'),
+      name: data.name,
+      email: data.email,
+      password: data.password,
     }).then((res)=>{
+      if(res.status === '201'){
+        setserverStatus(true);
+      }else{
+        setserverStatus(false);
+      }
       console.log(res.data)
+      setData({name:'',email:'',password:''});
     })
+    .catch((error) => {
+      console.error("There was an error!", error.response || error.message);
+      setserverStatus(false); 
+    });
   };
 
   return (
@@ -76,6 +94,7 @@ export default function Signup() {
                   fullWidth
                   id="name"
                   label="Name"
+                  onChange={handleChange}
                   autoFocus
                 />
               </Grid>
@@ -88,6 +107,7 @@ export default function Signup() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -99,6 +119,7 @@ export default function Signup() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  onChange={handleChange}
                 />
               </Grid>
 
@@ -111,6 +132,8 @@ export default function Signup() {
             >
               Sign Up
             </Button>
+            {serverStatus === true && <div>Submit successfully</div>}
+            {serverStatus === false && <div><h2 style={{color:'red'}}>Backend Server Down</h2></div>}
             <Grid container justifyContent="flex-end">
               <Grid item>
                
