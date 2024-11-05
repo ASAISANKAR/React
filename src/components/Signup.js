@@ -39,7 +39,7 @@ export default function Signup() {
       email: data.get('email'),
       password: data.get('password'),
     });
-    axios.post("http://saisankar.up.railway.app/signup",{
+    axios.post("https://saisankar.up.railway.app/signup",{
       name: data.get('name'),
       email: data.get('email'),
       password: data.get('password'),
