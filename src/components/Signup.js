@@ -128,7 +128,7 @@ export default function Signup() {
             >
               Sign Up
             </Button>
-            {serverStatus === true && <div>Submit successfully</div>}
+            {serverStatus === true && <div><h2 style={{color:'green'}}>Submit successfully</h2></div>}
             {serverStatus === false && <div><h2 style={{ color: 'red' }}>Backend Server Down</h2></div>}
             <Grid container justifyContent="flex-end">
               <Grid item>
