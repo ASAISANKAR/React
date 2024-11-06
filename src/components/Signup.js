@@ -40,7 +40,7 @@ export default function Signup() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    axios.post("https://saisankar.up.railway.app/signup", {
+    axios.post("http://54.221.13.151:1859/signup", {
       name: data.name,
       email: data.email,
       password: data.password,
@@ -53,7 +53,6 @@ export default function Signup() {
       } else if(res.status === 401){
         setServerStatus(false);
       }
-      console.log(res.data);
     })
     .catch((error) => {
       console.error("There was an error!", error.response || error.message);
