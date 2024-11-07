@@ -40,7 +40,7 @@ export default function Signup() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    axios.post("http://54.147.174.1:1859/signup", {
+    axios.post("https://saisankar.up.railway.app/signup", {
       name: data.name,
       email: data.email,
       password: data.password,
